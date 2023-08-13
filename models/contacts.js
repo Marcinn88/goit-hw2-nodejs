@@ -1,14 +1,92 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises')
+const patch = require("path");
+const contactsPath = patch.join(__dirname, "./contacts.json");
+const { nanoid } = require("nanoid");
+const Joi = require("joi");
 
-const listContacts = async () => {}
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required()
+})
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    return JSON.parse(data);
+  } catch (error) {
+    return null;
+  }
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const result = contacts.find((item) => item.id === contactId);
+    return result || null;
+  } catch (error) {
+    return null;
+  }
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const index = contacts.findIndex((item) => item.id === contactId);
+    if (index === -1) {
+      return null;
+    }
+    const [result] = contacts.splice(index, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return result;
+  } catch (error) {
+    return null;
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {
+    const contacts = await listContacts();
+    const newContact = { id: nanoid(), ...body };
+    const responseBody = addSchema.validate(body);
+    if (responseBody.error) {
+      console.log('Brak danych. Walidacja niepoprawna.');
+      return null;
+  } else {
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const index = contacts.findIndex((item) => item.id === contactId);
+    if (index === -1) {
+      return null;
+    }
+    contacts[index] = {
+      id: contactId,
+      name:
+        body.name !== undefined && body.name.trim().length > 0
+          ? body.name
+          : contacts[index].name,
+      email:
+        body.email !== undefined && body.email.trim().length > 0
+          ? body.email
+          : contacts[index].email,
+      phone:
+        body.phone !== undefined && body.phone.trim().length > 0
+          ? body.phone
+          : contacts[index].phone,
+    };
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
+  } catch (error) {
+    return null;
+  }
+};
 
 module.exports = {
   listContacts,
