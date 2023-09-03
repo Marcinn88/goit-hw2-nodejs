@@ -17,8 +17,8 @@ const get = async (req, res, next) =>{
 }
 
 const getById = async (req, res, next) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const results = await contactsServices.getOne(id);
         res.json({
             status: "succes",
@@ -72,6 +72,12 @@ const updateStatus = async (req, res, next) => {
         const { id } = req.params;
         const { favorite } = req.body;
         const results = await contactsServices.updateStatus(id, favorite);
+        if (!favorite) {
+            return res.status(400).json({message: "missing field favorite"})
+          }
+        if (!results) {
+            return res.status(404).json({message: "Not found"})
+          }
         res.json({
             status: "succes",
             code: 200,
