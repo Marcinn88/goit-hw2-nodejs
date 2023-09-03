@@ -3,18 +3,12 @@ const patch = require("path");
 const contactsPath = patch.join(__dirname, "./contacts.json");
 const { nanoid } = require("nanoid");
 const Joi = require("joi");
-const mongoose = require('mongoose');
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required()
 })
-
-const connection = mongoose.connect(uriDb, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 const listContacts = async () => {
   try {
