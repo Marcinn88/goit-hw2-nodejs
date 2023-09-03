@@ -36,7 +36,6 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
     try {
         const { body } = req;
-        console.log(body);
         const results = await contactsServices.create(body);
         res.json({
             status: "succes",
