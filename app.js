@@ -5,11 +5,11 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contactsrouter')
+
 const app = express()
 const contactRoutes = require('./routes/api/contactsrouter')
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4100;
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
@@ -25,9 +25,7 @@ app.use(contactRoutes);
 
 connection.then(()=>{
   console.log("Database connection succesfull.")
-  app.listen(PORT, () => {
-      console.log(`App listen on port ${PORT}`)
-  });
+
 }).catch((err)=>{
 console.log(`Error while estabsishing connections: [${err}]`)
 process.exit(1)
@@ -37,9 +35,6 @@ process.exit(1)
 app.get("")
 app.use(logger(formatsLogger))
 app.use(cors())
-// app.use(express.json())
-
-// app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
