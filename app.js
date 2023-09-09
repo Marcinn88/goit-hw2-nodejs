@@ -8,6 +8,8 @@ const cors = require('cors')
 
 const app = express()
 const contactRoutes = require('./routes/api/contactsrouter')
+const userRoutes = require('./routes/api/usersrouter')
+const authRoutes = require('./routes/api/authroutes')
 
 const PORT = process.env.PORT || 4100;
 
@@ -21,7 +23,11 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 });
 
 app.use(express.json());
+require('./config/passport')
+
 app.use(contactRoutes);
+app.use(userRoutes);
+app.use(authRoutes);
 
 connection.then(()=>{
   console.log("Database connection succesfull.")
