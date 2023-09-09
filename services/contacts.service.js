@@ -4,28 +4,29 @@ const getAll = async () => {
     return Contact.find()
 };
 
-const getOne = async (id) => {
-    return Contact.findById(id);
+const getOne = async (id, userId) => {
+    return Contact.findById({ _id: id, owner: userId });
+
 };
 
 const create = async (data) => {
     return Contact.create(data);
 };
 
-const update = async (id, data) => {
-    return Contact.findByIdAndUpdate(id, data, {
+const update = async (id, userId, data) => {
+    return Contact.findOneAndUpdate({ _id: id, owner: userId }, data, {
         new: true,
     })
 };
 
-const updateStatus = async (id, favorite) => {
-    return Contact.findByIdAndUpdate(id, { favorite }, {
+const updateStatus = async (id, userId, favorite) => {
+    return Contact.findOneAndUpdate({ _id: id, owner: userId }, { favorite }, {
         new: true,
     })
 };
 
-const remove = async (id) =>{
-    return Contact.findByIdAndDelete(id)
+const remove = async (id, userId) =>{
+    return Contact.findOneAndDelete({_id: id, owner: userId})
 };
 
 module.exports = {

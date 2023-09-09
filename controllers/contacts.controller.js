@@ -2,12 +2,13 @@ const contactsServices = require('../services/contacts.service')
 
 const get = async (req, res, next) =>{
     try {
-        const results = await contactsServices.getAll();
+        const {query, user} = req;
+        const results = await contactsServices.getAll({ ...query, owner: user._id });
         res.json({
             status: "succes",
             code: 200,
             data: {
-                contacts:results,
+                contacts: results,
             }
         })
     } catch (e) {
@@ -18,8 +19,9 @@ const get = async (req, res, next) =>{
 
 const getById = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const results = await contactsServices.getOne(id);
+        const {user, params} = req;
+        const { id } = params;
+        const results = await contactsServices.getOne(id, user._id);
         res.json({
             status: "succes",
             code: 200,
@@ -35,8 +37,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
-        const { body } = req;
-        const results = await contactsServices.create(body);
+        const { body, user } = req;
+        const results = await contactsServices.create({ ...body, owner: user._id });
         res.json({
             status: "succes",
             code: 200,
@@ -53,8 +55,8 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { body } = req;
-        const results = await contactsServices.update(id, body);
+        const { body, user } = req;
+        const results = await contactsServices.update(id, user._id, body);
         res.json({
             status: "succes",
             code: 200,
@@ -69,9 +71,10 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { favorite } = req.body;
-        const results = await contactsServices.updateStatus(id, favorite);
+        const { body, params, user } = req
+        const { id } = params;
+        const { favorite } = body;
+        const results = await contactsServices.updateStatus(id, user._id, favorite);
         if (!favorite) {
             return res.status(400).json({message: "missing field favorite"})
           }
@@ -93,7 +96,8 @@ next(e)
 const remove = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const results = await contactsServices.remove(id);
+        const {user} = req;
+        const results = await contactsServices.remove(id, user._id);
         res.json({
             status: "succes",
             code: 200,

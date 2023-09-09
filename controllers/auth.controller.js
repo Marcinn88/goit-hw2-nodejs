@@ -18,9 +18,9 @@ const signin = async (req, res) => {
       id: user.id,
       username: user.username,
     }
-  
+    const secret = process.env.SECRET
     const token = jwt.sign(payload, secret, { expiresIn: '1h' })
-    res.json({
+    return res.json({
       status: 'success',
       code: 200,
       data: {
@@ -30,7 +30,7 @@ const signin = async (req, res) => {
 }
 
 const signout = (req, res) => {
-    //TODO: Wylogowanie
+        //TODO: Wylogowanie
 }
 
 const signup = async (req, res, next) => {
