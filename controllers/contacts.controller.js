@@ -2,15 +2,15 @@ const contactsServices = require('../services/contacts.service')
 
 const get = async (req, res, next) =>{
     try {
-        const {query, user} = req;
-        const results = await contactsServices.getAll({ ...query, owner: user._id });
-        res.json({
-            status: "succes",
-            code: 200,
-            data: {
-                contacts: results,
-            }
-        })
+    const {query, user} = req;
+    const results = await contactsServices.getAll({ ...query, owner: user._id });
+    res.json({
+        status: "succes",
+        code: 200,
+        data: {
+            contacts: results,
+        }
+    })
     } catch (e) {
         console.error(e)
         next(e)
@@ -96,7 +96,7 @@ next(e)
 const remove = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const {user} = req;
+        const { user } = req;
         const results = await contactsServices.remove(id, user._id);
         res.json({
             status: "succes",

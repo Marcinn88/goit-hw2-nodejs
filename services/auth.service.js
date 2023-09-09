@@ -1,17 +1,25 @@
-const signin = (credentials) =>{
+const Users = require('../models/users.model');
 
-}
+const getUser = async (userId) => {
+    return Users.find(userId);
+};
 
-const signout = () => {
-
-}
-
-const signup = (user) => {
-    
-}
+const getLogout = async (userId) => {
+    const user = await Users.findOne({ _id: userId });
+    if (!user) {
+      res.json({
+        status: "Unauthorized",
+        code: 401,
+        data: {
+          message: "Not authorized"
+        }
+    })
+    }
+    await Users.findOneAndUpdate({ _id: userId }, { token: null });
+    return user;
+  };
 
 module.exports = {
-    signin, 
-    signout,
-    signup
+    getUser,
+    getLogout
 }

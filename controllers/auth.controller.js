@@ -1,5 +1,7 @@
 const User = require('../models/users.model')
 const jwt = require('jsonwebtoken')
+const userServices = require('../services/auth.service')
+const { token } = require('morgan')
 
 const signin = async (req, res) => {
     const { email, password } = req.body
@@ -29,10 +31,6 @@ const signin = async (req, res) => {
     })
 }
 
-const signout = (req, res) => {
-        //TODO: Wylogowanie
-}
-
 const signup = async (req, res, next) => {
     const {email, password} = req.body;
     const user = await User.findOne({ email }).lean();
@@ -59,9 +57,54 @@ const signup = async (req, res, next) => {
       next(error);
     }
 }
+const logout = async (req, res) => {
+  const { _id: userId } = req.user;
+  await userServices.getLogout(userId);
+  res.status(204).json({ status: "204 No Content" });
+};
+
+const current = async (req, res, next) => {
+  try {
+    const {user} = req;
+    if (user) {
+      res.json({
+        status: "succes",
+        code: 200,
+        data: {
+          email: user.email,
+          subscription: user.subscription,
+        }
+    })
+    }
+    else {
+    res.json({
+      status: "Unauthorized",
+      code: 401,
+      data: {
+        message: "Not authorized"
+      }
+  })
+}
+  } catch (error) {
+    res.json({
+      status: "Error",
+      code: 404,
+      data: {
+        message: "Error"
+      }
+  })
+  }
+};
 
 module.exports = {
     signin,
-    signout,
-    signup
+    logout,
+    signup,
+    current
 }
+
+
+
+
+
+

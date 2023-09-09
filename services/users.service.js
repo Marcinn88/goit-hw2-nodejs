@@ -1,9 +1,9 @@
 const User = require('../models/users.model');
 
-const signup = async (data) => {
-    return User.create(data);
+const getUser = async (userId) => {
+    return User.findOne({ owner: userId });
 };
 
 module.exports = {
-    signup
+    getUser
 }
