@@ -12,7 +12,7 @@ return path.join(
 };
 
 const getImagesPath = () => {
-    return path.join(__dirname,"..", "images");
+    return path.join(__dirname,"..", "tmp");
 }
 
 

@@ -68,6 +68,8 @@ const logout = async (req, res) => {
 const current = async (req, res, next) => {
   try {
     const {user} = req;
+    console.log(user);
+    console.log(req)
     if (user) {
       res.json({
         status: "succes",
@@ -99,7 +101,19 @@ const current = async (req, res, next) => {
 };
 
 const avatar = async (req, res) => {
-  //TODO: dodac wgrywanie nowego awatara i podmiane z linkiem w user.avararURL
+const {user} = req
+console.log(`user: ${user}`)
+res.json({
+  status: "succes",
+  code: 200,
+  data: {
+    email: user.email,
+    id: user._id,
+    avatar: user.avatarURL,
+    subscription: user.subscription,
+
+  }
+})
 };
 
 module.exports = {

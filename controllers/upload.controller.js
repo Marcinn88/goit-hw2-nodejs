@@ -5,8 +5,14 @@ const IMAGES_DIR = path.join(process.cwd(), 'images');
 
 const uploadFile = async (req, res, next) => {
     const { description } = req.body;
+    console.log(`description: ${description}`)
     const { path: temporaryName, originalname } = req.file;
+    console.log(`temporaryName: ${temporaryName}`)
+    console.log(`originalname: ${originalname}`)
+    // const newName = user._id
+    // const fileName = path.join(config.IMAGES_PATH, newName);
     const fileName = path.join(config.IMAGES_PATH, originalname);
+    console.log(`fileName: ${fileName}`)
     fs.rename(temporaryName, fileName).then(() => {
       console.log('File uploaded')
       return res.json({ 
