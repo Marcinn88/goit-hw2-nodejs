@@ -2,6 +2,7 @@ const User = require('../models/users.model')
 const jwt = require('jsonwebtoken')
 const userServices = require('../services/auth.service')
 const { token } = require('morgan')
+const gravatar = require('gravatar')
 
 const signin = async (req, res) => {
     const { email, password } = req.body
