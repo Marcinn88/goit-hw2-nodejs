@@ -46,6 +46,7 @@ const signup = async (req, res, next) => {
     try {
       const newUser = new User({ email });
       newUser.setPassword(password);
+      newUser.avatarURL = gravatar.url(email, {s: '100', r: 'x', d: 'robohash'}, false)
       await newUser.save();
       res.status(201).json({
         status: 'success',
@@ -97,11 +98,16 @@ const current = async (req, res, next) => {
   }
 };
 
+const avatar = async (req, res) => {
+  //TODO: dodac wgrywanie nowego awatara i podmiane z linkiem w user.avararURL
+};
+
 module.exports = {
     signin,
     logout,
     signup,
-    current
+    current,
+    avatar
 }
 
 

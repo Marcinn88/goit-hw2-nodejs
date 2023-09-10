@@ -26,7 +26,7 @@ const user = new Schema ({
     },
     avatarURL: {
       type: String,
-      default: gravatar.url(),
+      default: null,
     },
 })
 
