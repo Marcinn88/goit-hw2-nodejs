@@ -11,6 +11,4 @@ router.post('/logout', auth, authController.logout)
 router.patch('/avatars/test', auth, authController.avatar)
 router.patch('/avatars', auth, upload('file'), authController.avatar)
 
-// router.post('/upload', upload('file'), uploadController.uploadFile);
-
 module.exports = router;
