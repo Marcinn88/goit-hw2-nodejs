@@ -19,7 +19,13 @@ const getLogout = async (userId) => {
     return user;
   };
 
+// const updateAvatar = async (id, avatarURL) => {
+//    return Users.findOneAndUpdate({ _id: id }, { avatarURL }, {
+//         new: true,
+//     })
+// };
 module.exports = {
     getUser,
-    getLogout
+    getLogout,
+    // updateAvatar
 }

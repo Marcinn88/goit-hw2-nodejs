@@ -9,8 +9,6 @@ const uploadFile = async (req, res, next) => {
     const { path: temporaryName, originalname } = req.file;
     console.log(`temporaryName: ${temporaryName}`)
     console.log(`originalname: ${originalname}`)
-    // const newName = user._id
-    // const fileName = path.join(config.IMAGES_PATH, newName);
     const fileName = path.join(config.IMAGES_PATH, originalname);
     console.log(`fileName: ${fileName}`)
     fs.rename(temporaryName, fileName).then(() => {
