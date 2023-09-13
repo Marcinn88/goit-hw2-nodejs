@@ -19,7 +19,8 @@ const getLogout = async (userId) => {
     return user;
   };
 
+
 module.exports = {
     getUser,
-    getLogout
+    getLogout,
 }
