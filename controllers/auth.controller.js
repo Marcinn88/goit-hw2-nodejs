@@ -148,7 +148,7 @@ const sendAgain = async (req, res) => {
     if (!user) {
       return res.json({
         status: "error",
-        message: "User doesn't found",
+        message: "missing required field email",
       })
       }
     else {
