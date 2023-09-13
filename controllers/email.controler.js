@@ -2,9 +2,9 @@ const emailService = require('../services/email.service')
 
 const send = async (req, res) => {
 try { 
-    const result = emailService.send(req.body)
+    const result = await emailService.send(req.body)
     return res.json({
-        status: "succes",
+        status: "success",
         data: result,
         message: "Email sent succesfully"
     })
@@ -16,6 +16,7 @@ try {
     })
 
 }
+
 }
 
 module.exports = {
