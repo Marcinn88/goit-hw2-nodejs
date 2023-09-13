@@ -13,5 +13,6 @@ router.patch('/avatars/test', auth, authController.avatar)
 router.patch('/avatars', auth, upload('file'), authController.avatar)
 
 router.post('/send', emailController.send)
+router.get('/verify/:verificationToken', authController.verify, )
 
 module.exports = router;

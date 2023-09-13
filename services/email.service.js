@@ -12,13 +12,17 @@ const config = {
 }
 
 
-const send = async ({ to, subject, text }) => {
+const send = async ({ to, verify }) => {
 const transporter = nodemailer.createTransport(config);
+const maildo = to
+console.log(maildo)
+const mailotresci = verify
+console.log(mailotresci)
 const emailOptions = {
     from: process.env.MAIL_USER,
     to,
-    subject,
-    text
+    subject: 'Confirm your Email.',
+    text: `To confirm yor Email please use this link: ${verify}`
 };
  return await transporter.sendMail(emailOptions);
 }
@@ -26,3 +30,17 @@ const emailOptions = {
 module.exports = {
     send
 }
+
+
+
+// const send = async ({ email, verification }) => {
+//     const transporter = nodemailer.createTransport(config);
+//     const emailOptions = {
+//         from: process.env.MAIL_USER,
+//         to: email,
+//         subject: 'Confirm your Email.',
+//         text: verification
+//     };
+//      return await transporter.sendMail(emailOptions);
+//     }
+    

@@ -3,20 +3,22 @@ const fs = require('node:fs').promises;
 const jimp = require('jimp')
 const jwt = require('jsonwebtoken')
 const userServices = require('../services/auth.service')
+const emailService = require('../services/email.service')
 const { token } = require('morgan')
 const gravatar = require('gravatar')
 const path = require("node:path");
 const config = require('../config/config')
+const nanoid = require('nanoid')
 
 const signin = async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
   
-    if (!user || !user.validPassword(password)) {
+    if (!user || !user.validPassword(password) || !user.verify) {
       return res.status(400).json({
         status: 'error',
         code: 400,
-        message: 'Incorrect login or password',
+        message: 'Incorrect login, password or user is not verified',
         data: 'Bad request',
       })
     }
@@ -51,6 +53,12 @@ const signup = async (req, res, next) => {
       const newUser = new User({ email });
       newUser.setPassword(password);
       newUser.avatarURL = gravatar.url(email, {s: '100', r: 'x', d: 'robohash'}, false)
+      newUser.verificationToken = nanoid.nanoid()
+      const to = newUser.email
+      const verify = newUser.verificationToken
+      console.log(`email: ${to}`)
+      console.log(`token weryfikacji: ${verify}`)
+      await emailService.send({to, verify})
       await newUser.save();
       res.status(201).json({
         status: 'success',
@@ -135,12 +143,35 @@ const avatar = async (req, res, next) => {
 
   };
 
+
+  const verify = async (req, res) => {
+    const { verificationToken } = req.params
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+      res.status(404).json({
+      status: 'Error',
+      code: 404,
+      message: 'User not found',
+      data: 'Not found',
+    })
+  } else {
+  await User.findOneAndUpdate ({verificationToken}, {verificationToken: null, verify: true})
+  res.json({
+    status: 'success',
+    code: 200,
+    data: {
+      message: 'Verification successful'
+    },
+  })}
+  }
+
 module.exports = {
     signin,
     logout,
     signup,
     current,
-    avatar
+    avatar,
+    verify
 }
 
 
