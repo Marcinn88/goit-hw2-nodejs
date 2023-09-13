@@ -1,6 +1,7 @@
 const express =  require('express');
 const router = express.Router();
 const authController = require('../../controllers/auth.controller');
+const emailController = require('../../controllers/email.controler')
 const auth = require('../../middlewares/auth')
 const upload = require('../../middlewares/upload')
 
@@ -10,5 +11,7 @@ router.get('/current', auth, authController.current)
 router.post('/logout', auth, authController.logout)
 router.patch('/avatars/test', auth, authController.avatar)
 router.patch('/avatars', auth, upload('file'), authController.avatar)
+
+router.post('/send', emailController.send)
 
 module.exports = router;
