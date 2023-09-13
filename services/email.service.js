@@ -22,13 +22,27 @@ const emailOptions = {
     from: process.env.MAIL_USER,
     to,
     subject: 'Confirm your Email.',
-    text: `To confirm yor Email please use this link: ${verify}`
+    text: `To confirm your Email please use this link: /users/verify/:${verify}`
 };
  return await transporter.sendMail(emailOptions);
 }
 
+
+const sendAgain = async ({ email, token }) => {
+    const transporter = nodemailer.createTransport(config);
+    const emailOptions = {
+        from: process.env.MAIL_USER,
+        to: email,
+        subject: 'Confirm your Email.',
+        text: `To confirm your Email please use this link: /users/verify/:${token}`
+    };
+
+     return await transporter.sendMail(emailOptions);
+}
+    
 module.exports = {
-    send
+    send,
+    sendAgain
 }
 
 

@@ -30,19 +30,6 @@ const verify = async (token) => {
   }
 }
 
-
-
-
-
-// User.verificationToken = null
-// User.verify = true
-
-
-
-
-
-
-
 module.exports = {
   getUser,
   getLogout,

@@ -56,8 +56,6 @@ const signup = async (req, res, next) => {
       newUser.verificationToken = nanoid.nanoid()
       const to = newUser.email
       const verify = newUser.verificationToken
-      console.log(`email: ${to}`)
-      console.log(`token weryfikacji: ${verify}`)
       await emailService.send({to, verify})
       await newUser.save();
       res.status(201).json({
@@ -143,6 +141,40 @@ const avatar = async (req, res, next) => {
 
   };
 
+const sendAgain = async (req, res) => {
+  try { 
+    const  { email } = req.body
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({
+        status: "error",
+        message: "User doesn't found",
+      })
+      }
+    else {
+      if ( user.verify || user.verificationToken==null) {
+        return res.status(400).json({
+          status: "error",
+          message: "Verification has already been passed"
+        })} 
+      else {
+        const email = user.email
+        const token = user.verificationToken
+        await emailService.sendAgain({email, token})
+        return res.json({
+            status: "success",
+            message: "Verification email sent",
+        })
+      }
+    }
+  } catch (error){
+      return res.status(400).json({
+        status: "error",
+        data: error,
+        message: error.message
+      })
+    }
+} 
 
   const verify = async (req, res) => {
     const { verificationToken } = req.params
@@ -165,13 +197,15 @@ const avatar = async (req, res, next) => {
   })}
   }
 
+
 module.exports = {
     signin,
     logout,
     signup,
     current,
     avatar,
-    verify
+    verify,
+    sendAgain
 }
 
 
